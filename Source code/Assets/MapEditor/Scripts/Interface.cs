@@ -55,6 +55,12 @@ public class Interface : MonoBehaviour
 	
 	private Vector2 _tilesSelectionInterfaceScrollVector = Vector2.zero;
 	private List<GameObject> _placedGameObjectsAtCurrentDrag = new List<GameObject>();
+
+	private Texture2D _whiteTexture;
+
+	private List<int> _selectedTiles = new List<int>();
+	private Dictionary<string, List<int>> _groups = new Dictionary<string, List<int>>();
+	private List<string> _expandedGroups = new List<string>();
 	#endregion
 
 	#region private events
@@ -64,6 +70,10 @@ public class Interface : MonoBehaviour
 	//unity start callback
 	void Start() 
 	{
+		_whiteTexture = new Texture2D(1,1);
+		_whiteTexture.SetPixel(0,0, Color.white);
+		_whiteTexture.Apply();
+
 		_camera = this.gameObject.GetComponent<Camera>();
 
 		
@@ -137,21 +147,110 @@ public class Interface : MonoBehaviour
 		GUI.BeginGroup(__tilesSelectionInterfaceRect);
 		{
 			GUI.Box(new Rect(0, 0, __tilesSelectionInterfaceRect.width, __tilesSelectionInterfaceRect.height), "");
-			Rect __tilesSelectionInterfaceScrollView = new Rect(0,0, 75, (_loadedTiles.Count * 75) + ((_loadedTiles.Count + 1) * 10));
+			int __tilesToDraw = _loadedTiles.Count;
+			foreach(var group in _groups)
+				if(_expandedGroups.Contains(group.Key) == false)
+					__tilesToDraw -= group.Value.Count;
+
+			float __currentHeightToDraw = 0;
+
+			Rect __tilesSelectionInterfaceScrollView = new Rect(0,0, 75, (__tilesToDraw * 75) + ((__tilesToDraw + 1) * 10) + (_groups.Count * 25));
 			_tilesSelectionInterfaceScrollVector = GUI.BeginScrollView(new Rect(20, 5, __tilesSelectionInterfaceRect.width - 20, __tilesSelectionInterfaceRect.height - 10),
 			                                                            _tilesSelectionInterfaceScrollVector, 
 			                                                            __tilesSelectionInterfaceScrollView, 
 			                                                            false, 
 			                                                            _tilesSelectionInterfaceScrollVector.y >= __tilesSelectionInterfaceScrollView.height);
 			{
+				Action<int, Rect> __drawBtnAction = (p_number, p_position) =>
+				{
+					if(_currentSelectedTile == _loadedTiles[p_number])
+					{
+						var __backupColor = GUI.color;
+						GUI.color = new Color(1,1,1,0.25f);
+						GUI.DrawTexture(new Rect(p_position.x-2, p_position.y-2, p_position.width+4, p_position.height+4), _whiteTexture);
+						GUI.color = __backupColor;
+						GUI.Box(p_position, _loadedTiles[p_number].texture);
+					}
+					else if(GUI.Button(p_position, _loadedTiles[p_number].texture))
+					_currentSelectedTile = _loadedTiles[p_number];
+					
+					__currentHeightToDraw += p_position.height + 10;
+				};
+
+
+				//DRAW GROUPS
+				List<string> __toRemove = new List<string>();
+				foreach(var group in _groups)
+				{
+					bool __isExpanded = _expandedGroups.Contains(group.Key);
+					float __btnWidth = 20;
+
+					if(GUI.Button(new Rect(0,__currentHeightToDraw,__btnWidth,20), (__isExpanded) ? "-" : "+"))
+					{
+						if(__isExpanded)
+							_expandedGroups.Remove(group.Key);
+						else
+							_expandedGroups.Add(group.Key);
+					}
+
+					GUI.Label(new Rect(__btnWidth,__currentHeightToDraw, 60,20), group.Key);
+
+					if(GUI.Button(new Rect(__btnWidth+60, __currentHeightToDraw, __btnWidth, 20), "x"))
+						__toRemove.Add(group.Key);
+
+					__currentHeightToDraw += 25;
+
+					if(__isExpanded == false)
+						continue;
+
+					foreach(var tileNumber in group.Value)
+					{
+						Rect __btnRect = new Rect(17, __currentHeightToDraw, 75, 75);
+						__drawBtnAction(tileNumber, __btnRect);
+					}
+				}
+				__toRemove.ForEach(x => _groups.Remove(x));
+
+
+				//DRAW UNGROUPED TILES
 				for(int i = 0; i < _loadedTiles.Count; i++)
 				{
-					Rect __btnRect = new Rect(0, (i * 75) + ((i + 1) * 10), 75, 75);
+					bool __isInGroup = false;
+					foreach(var group in _groups)
+					{
+						bool __found = false;
+						foreach(var tileNumber in group.Value)
+						{
+							if(tileNumber == i)
+							{
+								__found = true;
+								break;
+							}
+						}
 
-					if(_currentSelectedTile == _loadedTiles[i])
-						GUI.Box(__btnRect, _loadedTiles[i].texture);
-					else if(GUI.Button(__btnRect, _loadedTiles[i].texture))
-						_currentSelectedTile = _loadedTiles[i];
+						if(__found == true)
+						{
+							__isInGroup = true;
+							break;
+						}
+					}
+
+					if(__isInGroup)
+						continue;
+
+					Rect __btnRect = new Rect(2, __currentHeightToDraw, 75, 75);
+
+					Rect __checkMarkRect = new Rect(__btnRect.x+__btnRect.width+4,__btnRect.y,15,15);
+					bool __selected = _selectedTiles.Contains(i);
+					if(GUI.Toggle(__checkMarkRect, __selected, "") != __selected)
+					{
+						if(__selected)
+							_selectedTiles.Remove(i);
+						else
+							_selectedTiles.Add(i);
+					}
+
+					__drawBtnAction(i, __btnRect);
 				}
 			}
 			GUI.EndScrollView();
@@ -191,6 +290,29 @@ public class Interface : MonoBehaviour
 				OnLoadBtnClicked();
 		}
 		GUI.EndGroup();
+
+
+		//GROUP BTNS
+		Rect __groupBtnsRect = new Rect(__tilesSelectionInterfaceRect.x + __tilesSelectionInterfaceRect.width, (Screen.height*.5f) -25, 115, 50);
+		if(_selectedTiles.Count > 0)
+		{
+			if(_areasInScreenToIgnoreMouseClick.Contains(__groupBtnsRect) == false)
+				_areasInScreenToIgnoreMouseClick.Add(__groupBtnsRect);
+
+			GUI.BeginGroup(__groupBtnsRect);
+			{
+				if(GUI.Button(new Rect(5,0,110,50), "Add to group:", btnStyle))
+				{
+					OnAddToGroupClicked();
+				}
+			}
+			GUI.EndGroup();
+		}
+		else
+		{
+			if(_areasInScreenToIgnoreMouseClick.Contains(__groupBtnsRect) == true)
+				_areasInScreenToIgnoreMouseClick.Remove(__groupBtnsRect);
+		}
 	}
 
 	private void OnSaveBtnClicked()
@@ -206,6 +328,7 @@ public class Interface : MonoBehaviour
 				{
 					Map.SaveDummy __dummy = new Map.SaveDummy();
 					__dummy.loadedTiles = new List<Tile>();
+					__dummy.tileGroups = _groups;
 					_loadedTiles.ForEach(x => __dummy.loadedTiles.Add(x.GetTileForSerialization()));
 					
 					__dummy.map = new Dictionary<Map.SaveDummy.DummyVector, int>();
@@ -261,6 +384,9 @@ public class Interface : MonoBehaviour
 								__savePath = __savePath + ".bytes";
 
 							__saveAction();
+
+							onHUDLocked = null;
+							lockHUD = false;
 						}
 					}
 					GUI.EndGroup();
@@ -276,6 +402,55 @@ public class Interface : MonoBehaviour
 				GUI.EndGroup();
 			};
 		}
+	}
+
+	private void OnAddToGroupClicked()
+	{
+		string __groupName = "";
+		lockHUD = true;
+		onHUDLocked = null;
+		onHUDLocked += () =>
+		{
+			//DRAW WINDOW
+			Rect __groupNameDialogRect = new Rect((Screen.width * 0.5f) - 200, (Screen.height*0.5f)-50, 400, 115);
+			GUI.BeginGroup(__groupNameDialogRect);
+			{
+				GUI.Box(new Rect(0,0,__groupNameDialogRect.width, __groupNameDialogRect.height), "");
+				
+				//SELECT GROUP NAME
+				Rect __selectGroupNameRect = new Rect(15,10,750,60);
+				GUI.BeginGroup(__selectGroupNameRect);
+				{
+					GUI.Label(new Rect(0,0, 400, 30), "Enter group name: ");
+					__groupName = GUI.TextField(new Rect(0, 30, 310, 25), __groupName);
+					
+					//SELECT BTN
+					if(GUI.Button(new Rect(315, 30, 50, 25), "Select"))
+					{
+						//do magic
+						if(_groups.ContainsKey(__groupName))
+							_groups[__groupName].AddRange(_selectedTiles);
+						else
+							_groups.Add(__groupName, _selectedTiles);
+
+						_selectedTiles = new List<int>();
+
+						lockHUD = false;
+						onHUDLocked = null;
+					}
+				}
+				GUI.EndGroup();
+				
+				//CANCEL BTN
+				if(GUI.Button(new Rect((__groupNameDialogRect.width * 0.5f) - 40, (__groupNameDialogRect.height) - 35, 80, 25), "Cancel"))
+				{
+					onHUDLocked = null;
+					lockHUD = false;
+				}
+				
+			}
+			GUI.EndGroup();
+		};
 	}
 
 	private void OnLoadBtnClicked()
@@ -307,6 +482,7 @@ public class Interface : MonoBehaviour
 		}
 		else
 		{
+			lockHUD = true;
 			onHUDLocked = null;
 			onHUDLocked += () =>
 			{
@@ -336,6 +512,9 @@ public class Interface : MonoBehaviour
 								ShowMessage("Invalid file path.");
 								return;
 							}
+
+							lockHUD = false;
+							onHUDLocked = null;
 
 							__loadAction();
 						}
@@ -453,6 +632,9 @@ public class Interface : MonoBehaviour
 							__texturePaths = new List<string>();
 							__texturePaths.Add(__texturePath);
 							__textureAction();
+
+							lockHUD = false;
+							onHUDLocked = null;
 						}
 					}
 					GUI.EndGroup();
@@ -624,6 +806,9 @@ public class Interface : MonoBehaviour
 						if(_tileIdCount < tile.Value)
 							_tileIdCount = tile.Value;
 					}
+
+					if(__dummy.tileGroups != null)
+						_groups = __dummy.tileGroups;
 				}
 				lockHUD = false;
 				onHUDLocked = null;
@@ -775,7 +960,10 @@ public class Interface : MonoBehaviour
 	private void CheckShortKeyInputs()
 	{
 		if(Input.GetKeyDown(KeyCode.Escape))
+		{
 			_currentSelectedTile = null;
+			_selectedTiles = new List<int>();
+		}
 
 		if(Input.GetKeyDown(KeyCode.E))
 			if(_currentSelectedTile != null)

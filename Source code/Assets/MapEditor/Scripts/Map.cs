@@ -30,6 +30,7 @@ public class Map : MonoBehaviour
 		}
 		public List<Tile> loadedTiles;
 		public Dictionary<DummyVector, int> map;
+		public Dictionary<string, List<int>> tileGroups;
 	}
 
 	#region inspector
