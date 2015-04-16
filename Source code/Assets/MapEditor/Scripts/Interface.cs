@@ -267,10 +267,10 @@ public class Interface : MonoBehaviour
 			if(GUI.Button(new Rect(0,0,(__tilesCreateDeleteRect.width * 0.5f) - 10, __tilesCreateDeleteRect.height), "Create", btnStyle))
 				OnCreateBtnClicked();
 
-			//delete
-			if(_currentSelectedTile != null)
+			//delete ##### desabilitei para apresentaçao de quinta (resolver 2 bugs - deletar em grupo - colocar novo tile depois de deletar antigo)
+			/*if(_currentSelectedTile != null)
 				if(GUI.Button(new Rect((__tilesCreateDeleteRect.width * 0.5f),0,(__tilesCreateDeleteRect.width * 0.5f) - 10, __tilesCreateDeleteRect.height), "Delete", btnStyle))
-					OnDeleteBtnClicked();
+					OnDeleteBtnClicked();*/
 		}
 		GUI.EndGroup();
 		

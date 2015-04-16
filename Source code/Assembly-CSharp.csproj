@@ -54,6 +54,7 @@
      <Compile Include="Assets\MapEditor\Scripts\ScreenBugFixer.cs" />
      <Compile Include="Assets\MapEditor\Scripts\Tile.cs" />
      <Compile Include="Assets\MapEditor\Scripts\TileObject.cs" />
+     <Compile Include="Assets\Utilidades\Console\Console.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
