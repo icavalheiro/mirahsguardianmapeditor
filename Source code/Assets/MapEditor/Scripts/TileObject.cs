@@ -58,6 +58,9 @@ public class TileObject : MonoBehaviour
 
 		__currentLocalPosition = bilboardRenderer.transform.localPosition;
 		bilboardRenderer.transform.localPosition = new Vector3(tile.yDesloc, __currentLocalPosition.y, tile.xDesloc);
+
+		__currentLocalPosition = groundRenderer.transform.localPosition;
+		groundRenderer.transform.localPosition = new Vector3(tile.yDesloc, __currentLocalPosition.y, tile.xDesloc);
 	}
 	
 	// Update is called once per frame
