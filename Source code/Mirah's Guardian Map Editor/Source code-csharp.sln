@@ -1,7 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
-Project("{C35E427F-ECD4-DAC8-5A61-CFEEBF0977DD}") = "Mirah's Guardian Map Editor", "Assembly-CSharp.csproj", "{7FE7092A-9388-681C-5FCB-ED54315A4632}"
+Project("{A98DF735-9AC5-2361-AF81-FA897D556A6A}") = "Source code", "Assembly-CSharp-vs.csproj", "{107596CC-7343-1DD8-7F31-97A4641C6396}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,15 +9,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7FE7092A-9388-681C-5FCB-ED54315A4632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7FE7092A-9388-681C-5FCB-ED54315A4632}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7FE7092A-9388-681C-5FCB-ED54315A4632}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7FE7092A-9388-681C-5FCB-ED54315A4632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{107596CC-7343-1DD8-7F31-97A4641C6396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{107596CC-7343-1DD8-7F31-97A4641C6396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{107596CC-7343-1DD8-7F31-97A4641C6396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{107596CC-7343-1DD8-7F31-97A4641C6396}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																								GlobalSection(MonoDevelopProperties) = preSolution
+														GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

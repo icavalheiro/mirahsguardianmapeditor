@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{107596CC-7343-1DD8-7F31-97A4641C6396}</ProjectGuid>
+	<ProjectGuid>{7FE7092A-9388-681C-5FCB-ED54315A4632}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -59,7 +59,7 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="System.Windows.Forms">
- <HintPath>C:/Users/BCIvan/Documents/GitHub/mirahsguardianmapeditor/Source code/Assets/Plugins/System.Windows.Forms.dll</HintPath>
+ <HintPath>C:/Users/ivan.cavalheiro/Documents/GitHub/mirahsguardianmapeditor/Source code/Mirah's Guardian Map Editor/Assets/Plugins/System.Windows.Forms.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iossupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
