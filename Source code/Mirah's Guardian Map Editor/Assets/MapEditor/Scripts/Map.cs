@@ -93,7 +93,7 @@ public class Map : MonoBehaviour
 		List<TileObject> __toReturn = new List<TileObject>();
 		_tilesInScene.ForEach(x => 
 		{
-			if(x.name == p_imageName)
+			if(x.tile.name == p_imageName)
 				__toReturn.Add(x);
 		});
 
