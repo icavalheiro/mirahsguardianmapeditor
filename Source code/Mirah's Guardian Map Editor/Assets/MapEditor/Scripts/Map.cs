@@ -88,6 +88,18 @@ public class Map : MonoBehaviour
 		return _tilesInScene.Find(x => x.transform.position == p_position);
 	}
 
+	public List<TileObject> GetTileObjectsByImageName(string p_imageName)
+	{
+		List<TileObject> __toReturn = new List<TileObject>();
+		_tilesInScene.ForEach(x => 
+		{
+			if(x.name == p_imageName)
+				__toReturn.Add(x);
+		});
+
+		return __toReturn;
+	}
+
 	public Vector3 TransformPositionToTile(Vector3 p_position)
 	{
 		return new Vector3(Mathf.Round(p_position.x), p_position.y, Mathf.Round(p_position.z));
