@@ -1,8 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\MapEditor\Scripts\Map.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\MapEditor\Plugin\Scripts\Map.cs">
     <Files>
-      <File FileName="Assets\MapEditor\Scripts\Map.cs" Line="99" Column="3" />
+      <File FileName="Assets\MapEditor\Plugin\Scripts\Map.cs" Line="100" Column="21" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

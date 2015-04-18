@@ -46,14 +46,14 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\MapEditor\Scripts\BilboardTile.cs" />
+     <Compile Include="Assets\MapEditor\Plugin\Scripts\BilboardTile.cs" />
+     <Compile Include="Assets\MapEditor\Plugin\Scripts\Map.cs" />
+     <Compile Include="Assets\MapEditor\Plugin\Scripts\Tile.cs" />
+     <Compile Include="Assets\MapEditor\Plugin\Scripts\TileObject.cs" />
      <Compile Include="Assets\MapEditor\Scripts\CameraMoviment.cs" />
      <Compile Include="Assets\MapEditor\Scripts\Interface.cs" />
-     <Compile Include="Assets\MapEditor\Scripts\Map.cs" />
      <Compile Include="Assets\MapEditor\Scripts\NavigationMarker.cs" />
      <Compile Include="Assets\MapEditor\Scripts\ScreenBugFixer.cs" />
-     <Compile Include="Assets\MapEditor\Scripts\Tile.cs" />
-     <Compile Include="Assets\MapEditor\Scripts\TileObject.cs" />
      <Compile Include="Assets\Utilidades\Console\Console.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
