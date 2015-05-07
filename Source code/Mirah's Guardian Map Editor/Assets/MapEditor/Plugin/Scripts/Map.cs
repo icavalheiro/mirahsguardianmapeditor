@@ -42,7 +42,7 @@ public class Map : MonoBehaviour
 	private List<Tile> _loadedTiles = new List<Tile>();
 	private List<TileObject> _tilesInScene = new List<TileObject>();
 	#endregion
-
+	
 	void Awake()
 	{
 		if(map == null)
@@ -66,8 +66,11 @@ public class Map : MonoBehaviour
 
 				foreach(var tileInScene in __dummy.map)
 				{
+					Tile __tile = _loadedTiles.Find(x => x.id == tileInScene.Value);
+
 					TileObject __tileObj = ((GameObject)GameObject.Instantiate(tilePrefab, tileInScene.Key.GetVector3(), tilePrefab.transform.rotation)).GetComponent<TileObject>();
-					__tileObj.Initialize(_loadedTiles.Find(x => x.id == tileInScene.Value));
+					__tileObj.transform.parent = this.transform;
+					__tileObj.Initialize(__tile);
 					_tilesInScene.Add(__tileObj);
 				}
 			}
